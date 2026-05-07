@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ñam Ñam — Panel Admin</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+        <link rel="icon" type="image/x-icon" href="/img/logo.ico" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --naranja: #ff5a1f;
+        --amarillo: #ffd84d;
+        --azul: #3d63ff;
+        --verde: #00c853;
+        --beige: #f5f1ea;
+        --negro: #111111;
+        --gris: #666;
+        --blanco: #ffffff;
+        --sidebar-w: 260px;
+      }
+      body {
+        font-family: "Manrope", sans-serif;
+        background: var(--beige);
+        color: var(--negro);
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        width: var(--sidebar-w);
+        background: var(--negro);
+        min-height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+        z-index: 100;
+      }
+      .sidebar-logo {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 1.6rem;
+        color: white;
+        text-decoration: none;
+        margin-bottom: 0.3rem;
+      }
+      .sidebar-logo span {
+        color: var(--naranja);
+      }
+      .sidebar-sub {
+        font-size: 0.75rem;
+        color: #888;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #222;
+      }
+      .nav-section-label {
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #555;
+        margin-bottom: 0.8rem;
+        margin-top: 1.5rem;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        padding: 0.85rem 1rem;
+        border-radius: 14px;
+        text-decoration: none;
+        color: #aaa;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+        transition: 0.2s;
+      }
+      .nav-item:hover,
+      .nav-item.active {
+        background: #1e1e1e;
+        color: white;
+      }
+      .nav-item.active {
+        color: var(--amarillo);
+      }
+      .nav-icon {
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+      }
+      .sidebar-bottom {
+        margin-top: auto;
+        padding-top: 2rem;
+        border-top: 1px solid #222;
+      }
+      .admin-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        background: #1a1a1a;
+        border-radius: 14px;
+      }
+      .admin-avatar {
+        width: 38px;
+        height: 38px;
+        background: var(--naranja);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: white;
+        font-size: 0.9rem;
+      }
+      .admin-info {
+        flex: 1;
+      }
+      .admin-name {
+        color: white;
+        font-weight: 800;
+        font-size: 0.85rem;
+      }
+      .admin-role {
+        color: #555;
+        font-size: 0.7rem;
+        font-weight: 700;
+      }
+
+      /* MAIN */
+      .main {
+        margin-left: var(--sidebar-w);
+        flex: 1;
+        padding: 3rem;
+      }
+
+      /* TOP BAR */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+      }
+      .topbar h1 {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 2.8rem;
+        line-height: 1;
+      }
+      .topbar h1 span {
+        color: var(--naranja);
+      }
+      .topbar-right {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .btn-volver {
+        text-decoration: none;
+        padding: 0.7rem 1.4rem;
+        border-radius: 999px;
+        background: white;
+        color: var(--negro);
+        font-weight: 800;
+        font-size: 0.85rem;
+        transition: 0.2s;
+      }
+      .btn-volver:hover {
+        transform: translateY(-2px);
+      }
+      .btn-nuevo {
+        text-decoration: none;
+        padding: 0.7rem 1.4rem;
+        border-radius: 999px;
+        background: var(--naranja);
+        color: white;
+        font-weight: 800;
+        font-size: 0.85rem;
+        transition: 0.2s;
+      }
+      .btn-nuevo:hover {
+        transform: translateY(-2px);
+      }
+
+      /* STATS */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+      }
+      .stat-card {
+        padding: 2rem;
+        border-radius: 24px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+      .stat-card::after {
+        content: "";
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .stat-card .stat-num {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 3.5rem;
+        line-height: 1;
+        margin-bottom: 0.3rem;
+      }
+      .stat-card .stat-label {
+        font-weight: 700;
+        font-size: 0.9rem;
+        opacity: 0.85;
+      }
+      .stat-card .stat-change {
+        font-size: 0.78rem;
+        font-weight: 800;
+        margin-top: 0.8rem;
+        opacity: 0.75;
+      }
+      .s1 {
+        background: var(--naranja);
+      }
+      .s2 {
+        background: var(--azul);
+      }
+      .s3 {
+        background: var(--negro);
+      }
+      .s4 {
+        background: var(--amarillo);
+        color: var(--negro);
+      }
+      .s4 .stat-label,
+      .s4 .stat-change {
+        color: var(--negro);
+      }
+
+      /* CONTENT GRID */
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      /* TABLE */
+      .panel {
+        background: white;
+        border-radius: 24px;
+        padding: 2rem;
+        overflow: hidden;
+      }
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.8rem;
+      }
+      .panel-title {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 1.5rem;
+      }
+      .panel-link {
+        color: var(--naranja);
+        font-weight: 800;
+        font-size: 0.85rem;
+        text-decoration: none;
+      }
+      .panel-link:hover {
+        text-decoration: underline;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        padding: 0.8rem 1rem;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #aaa;
+        border-bottom: 2px solid var(--beige);
+      }
+      tbody tr {
+        border-bottom: 1px solid var(--beige);
+        transition: 0.15s;
+      }
+      tbody tr:hover {
+        background: var(--beige);
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody td {
+        padding: 1rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+      }
+      .rest-name {
+        font-weight: 800;
+        font-size: 0.95rem;
+      }
+      .tag-mini {
+        padding: 0.3rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 800;
+      }
+      .tag-activo {
+        background: #d4ffd4;
+        color: #008800;
+      }
+      .tag-pendiente {
+        background: #fff4cc;
+        color: #886600;
+      }
+      .tag-cerrado {
+        background: #fde;
+        color: #cc0044;
+      }
+      .btn-accion {
+        padding: 0.35rem 0.8rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 800;
+        font-size: 0.75rem;
+        margin-right: 0.3rem;
+      }
+      .btn-editar {
+        background: #edf1ff;
+        color: var(--azul);
+      }
+      .btn-eliminar {
+        background: #fff0ee;
+        color: var(--naranja);
+      }
+
+      /* ACTIVITY */
+      .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 16px;
+        background: var(--beige);
+      }
+      .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .ai-naranja {
+        background: var(--naranja);
+        color: white;
+      }
+      .ai-azul {
+        background: var(--azul);
+        color: white;
+      }
+      .ai-amarillo {
+        background: var(--amarillo);
+      }
+      .activity-text {
+        flex: 1;
+      }
+      .activity-desc {
+        font-weight: 700;
+        font-size: 0.88rem;
+        margin-bottom: 0.2rem;
+      }
+      .activity-time {
+        font-size: 0.75rem;
+        color: var(--gris);
+        font-weight: 600;
+      }
+
+      /* QUICK ACTIONS */
+      .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.2rem;
+      }
+      .qa-btn {
+        padding: 1.5rem;
+        border-radius: 20px;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        font-weight: 800;
+        transition: 0.2s;
+      }
+      .qa-btn:hover {
+        transform: translateY(-4px);
+      }
+      .qa-icon {
+        font-size: 1.5rem;
+      }
+      .qa-label {
+        font-size: 0.85rem;
+      }
+      .qa-naranja {
+        background: var(--naranja);
+        color: white;
+      }
+      .qa-azul {
+        background: var(--azul);
+        color: white;
+      }
+      .qa-amarillo {
+        background: var(--amarillo);
+        color: var(--negro);
+      }
+      .qa-negro {
+        background: var(--negro);
+        color: white;
+      }
+      .qa-verde {
+        background: #e8fff0;
+        color: #00a844;
+      }
+      .qa-gris {
+        background: #f0f0f0;
+        color: var(--negro);
+      }
+
+      /* BOTTOM GRID */
+      .bottom-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      /* ZONAS MAPA */
+      .zona-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .zona-name {
+        font-weight: 700;
+        font-size: 0.88rem;
+        min-width: 90px;
+      }
+      .zona-track {
+        flex: 1;
+        background: var(--beige);
+        border-radius: 999px;
+        height: 10px;
+        overflow: hidden;
+      }
+      .zona-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: var(--naranja);
+      }
+      .zona-count {
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: var(--gris);
+      }
+
+      @media (max-width: 1200px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+        .bottom-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 900px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+        .main {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <a href="#" class="sidebar-logo">ñam<span>ñam</span></a>
+      <div class="sidebar-sub">Panel Administrador</div>
+
+      <div class="nav-section-label">Principal</div>
+      <a href="admin-dashboard.html" class="nav-item active">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+
+      <div class="nav-section-label">Contenido</div>
+      <a href="admin-restaurantes.html" class="nav-item">
+        <span class="nav-icon">🍽️</span> Restaurantes
+      </a>
+      <a href="admin-usuarios.html" class="nav-item">
+        <span class="nav-icon">👥</span> Usuarios
+      </a>
+      <a href="#" class="nav-item"> <span class="nav-icon">📸</span> Fotos </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">⭐</span> Valoraciones
+      </a>
+
+      <div class="nav-section-label">Sistema</div>
+      <a href="admin-config.html" class="nav-item">
+        <span class="nav-icon">⚙️</span> Configuración
+      </a>
+      <a href="/index.html" class="nav-item">
+        <span class="nav-icon">🌐</span> Ver web
+      </a>
+
+      <div class="sidebar-bottom">
+        <div class="admin-badge">
+          <div class="admin-avatar">A</div>
+          <div class="admin-info">
+            <div class="admin-name">Admin</div>
+            <div class="admin-role">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <h1>Dashboard<br /><span>General</span></h1>
+        <div class="topbar-right">
+          <a href="/index.html" class="btn-volver">← Ver web</a>
+          <a href="admin-restaurantes.html" class="btn-nuevo"
+            >+ Nuevo restaurante</a
+          >
+          <a
+            href="login.html"
+            class="btn-volver"
+            style="background: #fff0ee; color: var(--naranja)"
+            >Cerrar sesión →</a
+          >
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card s1">
+          <div class="stat-num">247</div>
+          <div class="stat-label">Restaurantes activos</div>
+          <div class="stat-change">↑ 12 esta semana</div>
+        </div>
+        <div class="stat-card s2">
+          <div class="stat-num">1.8k</div>
+          <div class="stat-label">Usuarios registrados</div>
+          <div class="stat-change">↑ 43 este mes</div>
+        </div>
+        <div class="stat-card s3">
+          <div class="stat-num">3.2k</div>
+          <div class="stat-label">Fotos subidas</div>
+          <div class="stat-change">↑ 89 esta semana</div>
+        </div>
+        <div class="stat-card s4">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Pendientes revisión</div>
+          <div class="stat-change">⚠ Requieren atención</div>
+        </div>
+      </div>
+
+      <!-- CONTENT GRID -->
+      <div class="content-grid">
+        <!-- ÚLTIMOS RESTAURANTES -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Últimos restaurantes</div>
+            <a href="admin-restaurantes.html" class="panel-link">Ver todos →</a>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Zona</th>
+                <th>Categoría</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="rest-name">Taberna El Oso</div></td>
+                <td>Malasaña</td>
+                <td><span class="tag-mini tag-activo">Tapas</span></td>
+                <td><span class="tag-mini tag-activo">Activo</span></td>
+                <td>
+                  <button class="btn-accion btn-editar">Editar</button>
+                  <button class="btn-accion btn-eliminar">Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="rest-name">Ramen Tokyou</div></td>
+                <td>Lavapiés</td>
+                <td><span class="tag-mini tag-pendiente">Japonesa</span></td>
+                <td><span class="tag-mini tag-pendiente">Pendiente</span></td>
+                <td>
+                  <button class="btn-accion btn-editar">Editar</button>
+                  <button class="btn-accion btn-eliminar">Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="rest-name">La Trattoria</div></td>
+                <td>Chueca</td>
+                <td><span class="tag-mini tag-activo">Italiana</span></td>
+                <td><span class="tag-mini tag-activo">Activo</span></td>
+                <td>
+                  <button class="btn-accion btn-editar">Editar</button>
+                  <button class="btn-accion btn-eliminar">Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="rest-name">Veggie Lab</div></td>
+                <td>Chamberí</td>
+                <td><span class="tag-mini tag-activo">Vegana</span></td>
+                <td><span class="tag-mini tag-cerrado">Cerrado</span></td>
+                <td>
+                  <button class="btn-accion btn-editar">Editar</button>
+                  <button class="btn-accion btn-eliminar">Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="rest-name">Casa Pepe</div></td>
+                <td>Sol</td>
+                <td><span class="tag-mini tag-activo">Española</span></td>
+                <td><span class="tag-mini tag-activo">Activo</span></td>
+                <td>
+                  <button class="btn-accion btn-editar">Editar</button>
+                  <button class="btn-accion btn-eliminar">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ACTIVIDAD RECIENTE -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Actividad reciente</div>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon ai-naranja">🍽️</div>
+              <div class="activity-text">
+                <div class="activity-desc">María G. añadió "Ramen Tokyou"</div>
+                <div class="activity-time">Hace 12 minutos</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon ai-azul">📸</div>
+              <div class="activity-text">
+                <div class="activity-desc">
+                  Pedro R. subió 3 fotos en Taberna El Oso
+                </div>
+                <div class="activity-time">Hace 34 minutos</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon ai-amarillo">⭐</div>
+              <div class="activity-text">
+                <div class="activity-desc">
+                  Ana M. valoró La Trattoria — 4.5★
+                </div>
+                <div class="activity-time">Hace 1 hora</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon ai-naranja">👤</div>
+              <div class="activity-text">
+                <div class="activity-desc">Nuevo usuario: carlos_madrid</div>
+                <div class="activity-time">Hace 2 horas</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon ai-azul">🚫</div>
+              <div class="activity-text">
+                <div class="activity-desc">Foto reportada en Veggie Lab</div>
+                <div class="activity-time">Hace 3 horas</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM GRID -->
+      <div class="bottom-grid">
+        <!-- ZONAS -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Restaurantes por zona</div>
+          </div>
+          <div class="zona-bar">
+            <div class="zona-name">Malasaña</div>
+            <div class="zona-track">
+              <div class="zona-fill" style="width: 78%"></div>
+            </div>
+            <div class="zona-count">52</div>
+          </div>
+          <div class="zona-bar">
+            <div class="zona-name">Chueca</div>
+            <div class="zona-track">
+              <div
+                class="zona-fill"
+                style="width: 62%; background: var(--azul)"
+              ></div>
+            </div>
+            <div class="zona-count">41</div>
+          </div>
+          <div class="zona-bar">
+            <div class="zona-name">Lavapiés</div>
+            <div class="zona-track">
+              <div
+                class="zona-fill"
+                style="width: 55%; background: var(--negro)"
+              ></div>
+            </div>
+            <div class="zona-count">37</div>
+          </div>
+          <div class="zona-bar">
+            <div class="zona-name">Chamberí</div>
+            <div class="zona-track">
+              <div
+                class="zona-fill"
+                style="width: 48%; background: var(--amarillo)"
+              ></div>
+            </div>
+            <div class="zona-count">32</div>
+          </div>
+          <div class="zona-bar">
+            <div class="zona-name">Retiro</div>
+            <div class="zona-track">
+              <div class="zona-fill" style="width: 36%"></div>
+            </div>
+            <div class="zona-count">24</div>
+          </div>
+          <div class="zona-bar">
+            <div class="zona-name">Sol</div>
+            <div class="zona-track">
+              <div
+                class="zona-fill"
+                style="width: 28%; background: var(--azul)"
+              ></div>
+            </div>
+            <div class="zona-count">19</div>
+          </div>
+        </div>
+
+        <!-- ACCIONES RÁPIDAS -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Acciones rápidas</div>
+          </div>
+          <div class="quick-actions">
+            <a href="admin-restaurantes.html" class="qa-btn qa-naranja">
+              <span class="qa-icon">🍽️</span>
+              <span class="qa-label">Gestionar restaurantes</span>
+            </a>
+            <a href="admin-usuarios.html" class="qa-btn qa-azul">
+              <span class="qa-icon">👥</span>
+              <span class="qa-label">Gestionar usuarios</span>
+            </a>
+            <a href="#" class="qa-btn qa-amarillo">
+              <span class="qa-icon">📸</span>
+              <span class="qa-label">Revisar fotos</span>
+            </a>
+            <a href="admin-config.html" class="qa-btn qa-negro">
+              <span class="qa-icon">⚙️</span>
+              <span class="qa-label">Configuración</span>
+            </a>
+            <a href="#" class="qa-btn qa-verde">
+              <span class="qa-icon">⭐</span>
+              <span class="qa-label">Ver valoraciones</span>
+            </a>
+            <a href="#" class="qa-btn qa-gris">
+              <span class="qa-icon">📊</span>
+              <span class="qa-label">Exportar datos</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
