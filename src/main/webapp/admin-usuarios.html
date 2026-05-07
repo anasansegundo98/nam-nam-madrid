@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ñam Ñam — Gestionar Usuarios</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --naranja: #ff5a1f;
+        --amarillo: #ffd84d;
+        --azul: #3d63ff;
+        --beige: #f5f1ea;
+        --negro: #111111;
+        --gris: #666;
+        --blanco: #ffffff;
+        --sidebar-w: 260px;
+      }
+      body {
+        font-family: "Manrope", sans-serif;
+        background: var(--beige);
+        color: var(--negro);
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar {
+        width: var(--sidebar-w);
+        background: var(--negro);
+        min-height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+        z-index: 100;
+      }
+      .sidebar-logo {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 1.6rem;
+        color: white;
+        text-decoration: none;
+        margin-bottom: 0.3rem;
+      }
+      .sidebar-logo span {
+        color: var(--naranja);
+      }
+      .sidebar-sub {
+        font-size: 0.75rem;
+        color: #888;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #222;
+      }
+      .nav-section-label {
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #555;
+        margin-bottom: 0.8rem;
+        margin-top: 1.5rem;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        padding: 0.85rem 1rem;
+        border-radius: 14px;
+        text-decoration: none;
+        color: #aaa;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+        transition: 0.2s;
+      }
+      .nav-item:hover,
+      .nav-item.active {
+        background: #1e1e1e;
+        color: white;
+      }
+      .nav-item.active {
+        color: var(--amarillo);
+      }
+      .nav-icon {
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+      }
+      .sidebar-bottom {
+        margin-top: auto;
+        padding-top: 2rem;
+        border-top: 1px solid #222;
+      }
+      .admin-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        background: #1a1a1a;
+        border-radius: 14px;
+      }
+      .admin-avatar {
+        width: 38px;
+        height: 38px;
+        background: var(--naranja);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: white;
+        font-size: 0.9rem;
+      }
+      .admin-info {
+        flex: 1;
+      }
+      .admin-name {
+        color: white;
+        font-weight: 800;
+        font-size: 0.85rem;
+      }
+      .admin-role {
+        color: #555;
+        font-size: 0.7rem;
+        font-weight: 700;
+      }
+      .main {
+        margin-left: var(--sidebar-w);
+        flex: 1;
+        padding: 3rem;
+      }
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+      }
+      .topbar h1 {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 2.8rem;
+        line-height: 1;
+      }
+      .topbar h1 span {
+        color: var(--azul);
+      }
+
+      .filtros-bar {
+        background: white;
+        border-radius: 20px;
+        padding: 1.5rem 2rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      .filtros-bar input,
+      .filtros-bar select {
+        padding: 0.7rem 1.2rem;
+        border-radius: 12px;
+        border: 2px solid #eee;
+        font-family: "Manrope", sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        color: var(--negro);
+        outline: none;
+        transition: 0.2s;
+      }
+      .filtros-bar input {
+        flex: 1;
+        min-width: 200px;
+      }
+      .filtros-bar input:focus,
+      .filtros-bar select:focus {
+        border-color: var(--azul);
+      }
+      .btn-filtrar {
+        padding: 0.7rem 1.4rem;
+        border-radius: 12px;
+        border: none;
+        background: var(--negro);
+        color: white;
+        font-weight: 800;
+        cursor: pointer;
+        font-size: 0.88rem;
+      }
+      .results-count {
+        margin-left: auto;
+        font-weight: 700;
+        color: var(--gris);
+        font-size: 0.88rem;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 2rem;
+      }
+      .panel {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+      }
+      .panel-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 2px solid var(--beige);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .panel-title {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 1.4rem;
+        flex: 1;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        padding: 1rem 1.2rem;
+        text-align: left;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #aaa;
+        background: #fafafa;
+        border-bottom: 2px solid var(--beige);
+      }
+      tbody tr {
+        border-bottom: 1px solid var(--beige);
+        transition: 0.15s;
+        cursor: pointer;
+      }
+      tbody tr:hover {
+        background: #f5f8ff;
+      }
+      tbody tr.selected {
+        background: #edf1ff;
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody td {
+        padding: 1rem 1.2rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        vertical-align: middle;
+      }
+
+      .user-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+      }
+      .user-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: white;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      .user-name {
+        font-weight: 800;
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+      }
+      .user-email {
+        font-size: 0.75rem;
+        color: var(--gris);
+      }
+
+      .tag-mini {
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 800;
+      }
+      .tag-activo {
+        background: #d4ffd4;
+        color: #008800;
+      }
+      .tag-baneado {
+        background: #fde;
+        color: #cc0044;
+      }
+      .tag-admin {
+        background: var(--amarillo);
+        color: var(--negro);
+      }
+      .tag-user {
+        background: #edf1ff;
+        color: var(--azul);
+      }
+
+      .actions-cell {
+        display: flex;
+        gap: 0.4rem;
+      }
+      .btn-a {
+        padding: 0.4rem 0.85rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 800;
+        font-size: 0.75rem;
+        transition: 0.15s;
+      }
+      .btn-a:hover {
+        transform: translateY(-1px);
+      }
+      .btn-ver {
+        background: #edf1ff;
+        color: var(--azul);
+      }
+      .btn-banear {
+        background: #fff0ee;
+        color: var(--naranja);
+      }
+      .btn-desbanear {
+        background: #d4ffd4;
+        color: #008800;
+      }
+
+      .pagination {
+        padding: 1.5rem 2rem;
+        border-top: 2px solid var(--beige);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .pag-info {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--gris);
+      }
+      .pag-btns {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .pag-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 2px solid #eee;
+        background: white;
+        font-weight: 800;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .pag-btn.active,
+      .pag-btn:hover {
+        background: var(--azul);
+        color: white;
+        border-color: var(--azul);
+      }
+
+      /* USER DETAIL PANEL */
+      .user-detail {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .ud-profile {
+        padding: 2rem;
+        text-align: center;
+      }
+      .ud-avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Archivo Black", sans-serif;
+        font-size: 1.8rem;
+        color: white;
+      }
+      .ud-name {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+      }
+      .ud-email {
+        color: var(--gris);
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      .ud-role-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .ud-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+        padding: 0 1.5rem;
+      }
+      .ud-stat {
+        background: var(--beige);
+        border-radius: 16px;
+        padding: 1.2rem;
+        text-align: center;
+      }
+      .ud-stat-num {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 1.8rem;
+        margin-bottom: 0.2rem;
+      }
+      .ud-stat-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--gris);
+      }
+
+      .ud-activity {
+        padding: 1.5rem;
+      }
+      .ud-activity h4 {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      .ud-rest-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+      }
+      .ud-rest-item {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        background: var(--beige);
+        border-radius: 12px;
+      }
+      .ud-rest-emoji {
+        font-size: 1.2rem;
+      }
+      .ud-rest-name {
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+      .ud-rest-rating {
+        font-size: 0.75rem;
+        color: var(--naranja);
+        font-weight: 800;
+      }
+
+      .ud-actions {
+        padding: 0 1.5rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+      }
+      .btn-action-full {
+        width: 100%;
+        padding: 0.9rem;
+        border-radius: 14px;
+        border: none;
+        cursor: pointer;
+        font-weight: 800;
+        font-size: 0.88rem;
+        text-align: center;
+        transition: 0.2s;
+      }
+      .btn-action-full:hover {
+        transform: translateY(-2px);
+      }
+      .btn-banear-full {
+        background: #fff0ee;
+        color: var(--naranja);
+      }
+      .btn-promover {
+        background: var(--amarillo);
+        color: var(--negro);
+      }
+      .select-hint {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #aaa;
+        font-weight: 600;
+      }
+      .select-hint .hint-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a href="#" class="sidebar-logo">ñam<span>ñam</span></a>
+      <div class="sidebar-sub">Panel Administrador</div>
+      <div class="nav-section-label">Principal</div>
+      <a href="admin-dashboard.html" class="nav-item"
+        ><span class="nav-icon">📊</span> Dashboard</a
+      >
+      <div class="nav-section-label">Contenido</div>
+      <a href="admin-restaurantes.html" class="nav-item"
+        ><span class="nav-icon">🍽️</span> Restaurantes</a
+      >
+      <a href="admin-usuarios.html" class="nav-item active"
+        ><span class="nav-icon">👥</span> Usuarios</a
+      >
+      <a href="#" class="nav-item"><span class="nav-icon">📸</span> Fotos</a>
+      <a href="#" class="nav-item"
+        ><span class="nav-icon">⭐</span> Valoraciones</a
+      >
+      <div class="nav-section-label">Sistema</div>
+      <a href="admin-config.html" class="nav-item"
+        ><span class="nav-icon">⚙️</span> Configuración</a
+      >
+      <a href="index.html" class="nav-item"
+        ><span class="nav-icon">🌐</span> Ver web</a
+      >
+      <div class="sidebar-bottom">
+        <div class="admin-badge">
+          <div class="admin-avatar">A</div>
+          <div class="admin-info">
+            <div class="admin-name">Admin</div>
+            <div class="admin-role">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <h1>Gestionar<br /><span>Usuarios</span></h1>
+      </div>
+
+      <div class="filtros-bar">
+        <input type="text" placeholder="🔍 Buscar usuario o email..." />
+        <select>
+          <option>Todos los roles</option>
+          <option>Admin</option>
+          <option>Usuario</option>
+        </select>
+        <select>
+          <option>Todos los estados</option>
+          <option>Activo</option>
+          <option>Baneado</option>
+        </select>
+        <button class="btn-filtrar">Filtrar</button>
+        <span class="results-count">1.842 usuarios</span>
+      </div>
+
+      <div class="content-grid">
+        <!-- TABLE -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Lista de usuarios</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>Restaurantes</th>
+                <th>Fotos</th>
+                <th>Registro</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="selectUser(0)" id="row-0">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background: #ff5a1f">M</div>
+                    <div>
+                      <div class="user-name">maria_garcia</div>
+                      <div class="user-email">maria@gmail.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tag-mini tag-user">Usuario</span></td>
+                <td>12</td>
+                <td>34</td>
+                <td>Jan 2024</td>
+                <td><span class="tag-mini tag-activo">Activo</span></td>
+                <td class="actions-cell">
+                  <button
+                    class="btn-a btn-ver"
+                    onclick="
+                      selectUser(0);
+                      event.stopPropagation();
+                    "
+                  >
+                    Ver
+                  </button>
+                  <button class="btn-a btn-banear">Banear</button>
+                </td>
+              </tr>
+              <tr onclick="selectUser(1)" id="row-1">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background: #3d63ff">P</div>
+                    <div>
+                      <div class="user-name">pedro_ruiz</div>
+                      <div class="user-email">pedro@hotmail.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tag-mini tag-user">Usuario</span></td>
+                <td>7</td>
+                <td>22</td>
+                <td>Mar 2024</td>
+                <td><span class="tag-mini tag-activo">Activo</span></td>
+                <td class="actions-cell">
+                  <button
+                    class="btn-a btn-ver"
+                    onclick="
+                      selectUser(1);
+                      event.stopPropagation();
+                    "
+                  >
+                    Ver
+                  </button>
+                  <button class="btn-a btn-banear">Banear</button>
+                </td>
+              </tr>
+              <tr onclick="selectUser(2)" id="row-2">
+                <td>
+                  <div class="user-cell">
+                    <div
+                      class="user-avatar"
+                      style="background: #ffd84d; color: #111"
+                    >
+                      A
+                    </div>
+                    <div>
+                      <div class="user-name">ana_madrid</div>
+                      <div class="user-email">ana@gmail.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tag-mini tag-admin">Admin</span></td>
+                <td>45</td>
+                <td>120</td>
+                <td>Dec 2023</td>
+                <td><span class="tag-mini tag-activo">Activo</span></td>
+                <td class="actions-cell">
+                  <button
+                    class="btn-a btn-ver"
+                    onclick="
+                      selectUser(2);
+                      event.stopPropagation();
+                    "
+                  >
+                    Ver
+                  </button>
+                  <button class="btn-a btn-banear">Banear</button>
+                </td>
+              </tr>
+              <tr onclick="selectUser(3)" id="row-3">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background: #ccc">C</div>
+                    <div>
+                      <div class="user-name">carlos_madrid</div>
+                      <div class="user-email">carlos@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tag-mini tag-user">Usuario</span></td>
+                <td>0</td>
+                <td>2</td>
+                <td>May 2024</td>
+                <td><span class="tag-mini tag-baneado">Baneado</span></td>
+                <td class="actions-cell">
+                  <button
+                    class="btn-a btn-ver"
+                    onclick="
+                      selectUser(3);
+                      event.stopPropagation();
+                    "
+                  >
+                    Ver
+                  </button>
+                  <button class="btn-a btn-desbanear">Desbanear</button>
+                </td>
+              </tr>
+              <tr onclick="selectUser(4)" id="row-4">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background: #00c853">L</div>
+                    <div>
+                      <div class="user-name">laura_foodies</div>
+                      <div class="user-email">laura@gmail.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="tag-mini tag-user">Usuario</span></td>
+                <td>18</td>
+                <td>67</td>
+                <td>Feb 2024</td>
+                <td><span class="tag-mini tag-activo">Activo</span></td>
+                <td class="actions-cell">
+                  <button
+                    class="btn-a btn-ver"
+                    onclick="
+                      selectUser(4);
+                      event.stopPropagation();
+                    "
+                  >
+                    Ver
+                  </button>
+                  <button class="btn-a btn-banear">Banear</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination">
+            <div class="pag-info">Mostrando 1–5 de 1.842</div>
+            <div class="pag-btns">
+              <button class="pag-btn">‹</button>
+              <button class="pag-btn active">1</button>
+              <button class="pag-btn">2</button>
+              <button class="pag-btn">3</button>
+              <button class="pag-btn">›</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- USER DETAIL -->
+        <div class="panel" id="userDetail">
+          <div class="select-hint">
+            <div class="hint-icon">👆</div>
+            Selecciona un usuario para ver sus detalles
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const users = [
+        {
+          name: "maria_garcia",
+          email: "maria@gmail.com",
+          color: "#ff5a1f",
+          letter: "M",
+          role: "Usuario",
+          rests: 12,
+          fotos: 34,
+          valoraciones: 28,
+          status: "Activo",
+          restaurantes: [
+            { emoji: "🍕", name: "La Trattoria", rating: "4.7" },
+            { emoji: "🥘", name: "Taberna El Oso", rating: "4.5" },
+            { emoji: "🍜", name: "Noodle Bar", rating: "4.2" },
+          ],
+        },
+        {
+          name: "pedro_ruiz",
+          email: "pedro@hotmail.com",
+          color: "#3d63ff",
+          letter: "P",
+          role: "Usuario",
+          rests: 7,
+          fotos: 22,
+          valoraciones: 15,
+          status: "Activo",
+          restaurantes: [
+            { emoji: "🍔", name: "Burger & Sons", rating: "4.0" },
+            { emoji: "🥗", name: "Green Bowl", rating: "3.8" },
+          ],
+        },
+        {
+          name: "ana_madrid",
+          email: "ana@gmail.com",
+          color: "#ffd84d",
+          letter: "A",
+          role: "Admin",
+          rests: 45,
+          fotos: 120,
+          valoraciones: 89,
+          status: "Activo",
+          restaurantes: [
+            { emoji: "🍣", name: "Sushi Kai", rating: "4.9" },
+            { emoji: "🥩", name: "Casa Pepe", rating: "4.6" },
+            { emoji: "🌮", name: "Taco Loco", rating: "4.3" },
+          ],
+        },
+        {
+          name: "carlos_madrid",
+          email: "carlos@email.com",
+          color: "#ccc",
+          letter: "C",
+          role: "Usuario",
+          rests: 0,
+          fotos: 2,
+          valoraciones: 1,
+          status: "Baneado",
+          restaurantes: [],
+        },
+        {
+          name: "laura_foodies",
+          email: "laura@gmail.com",
+          color: "#00c853",
+          letter: "L",
+          role: "Usuario",
+          rests: 18,
+          fotos: 67,
+          valoraciones: 44,
+          status: "Activo",
+          restaurantes: [
+            { emoji: "🥐", name: "Café Viena", rating: "4.8" },
+            { emoji: "🍦", name: "Heladería Lis", rating: "4.7" },
+          ],
+        },
+      ];
+
+      function selectUser(idx) {
+        document
+          .querySelectorAll("tbody tr")
+          .forEach((r, i) => r.classList.toggle("selected", i === idx));
+        const u = users[idx];
+        const roleClass = u.role === "Admin" ? "tag-admin" : "tag-user";
+        const statusClass =
+          u.status === "Activo" ? "tag-activo" : "tag-baneado";
+        const restHTML = u.restaurantes.length
+          ? u.restaurantes
+              .map(
+                (r) =>
+                  `<div class="ud-rest-item"><span class="ud-rest-emoji">${r.emoji}</span><div><div class="ud-rest-name">${r.name}</div><div class="ud-rest-rating">★ ${r.rating}</div></div></div>`,
+              )
+              .join("")
+          : '<p style="color:#aaa;font-size:.85rem;font-weight:600;">Ningún restaurante añadido</p>';
+        const banBtn =
+          u.status === "Activo"
+            ? `<button class="btn-action-full btn-banear-full">🚫 Banear usuario</button>`
+            : `<button class="btn-action-full" style="background:#d4ffd4;color:#008800;">✅ Desbanear usuario</button>`;
+        document.getElementById("userDetail").innerHTML = `
+    <div class="user-detail">
+      <div class="ud-profile">
+        <div class="ud-avatar" style="background:${u.color};">${u.letter}</div>
+        <div class="ud-name">${u.name}</div>
+        <div class="ud-email">${u.email}</div>
+        <span class="ud-role-badge ${roleClass}">${u.role}</span> <span class="ud-role-badge ${statusClass}">${u.status}</span>
+      </div>
+      <div class="ud-stats">
+        <div class="ud-stat"><div class="ud-stat-num" style="color:var(--naranja);">${u.rests}</div><div class="ud-stat-label">Restaurantes</div></div>
+        <div class="ud-stat"><div class="ud-stat-num" style="color:var(--azul);">${u.fotos}</div><div class="ud-stat-label">Fotos</div></div>
+        <div class="ud-stat"><div class="ud-stat-num">${u.valoraciones}</div><div class="ud-stat-label">Valoraciones</div></div>
+        <div class="ud-stat"><div class="ud-stat-num" style="color:var(--amarillo);">⭐</div><div class="ud-stat-label">Favoritos</div></div>
+      </div>
+      <div class="ud-activity">
+        <h4>Restaurantes añadidos</h4>
+        <div class="ud-rest-list">${restHTML}</div>
+      </div>
+      <div class="ud-actions">
+        ${banBtn}
+        ${u.role === "Usuario" ? `<button class="btn-action-full btn-promover">⭐ Promover a Admin</button>` : ""}
+      </div>
+    </div>`;
+      }
+    </script>
+  </body>
+</html>
