@@ -1,5 +1,3 @@
-# nam-nam-madrid
-
 # <img src="Logo-Photoroom.png" width="35" alt="Logotipo Ñam Ñam"> Ñam Ñam Madrid 
 
 
