@@ -4,7 +4,7 @@ public class Usuario {
 
 	// Atributos
 
-	private String idusuario;
+	private int idusuario;
 	private String nombre_usuario;
 	private String email;
 	private String contrasena;
@@ -13,7 +13,7 @@ public class Usuario {
 	
 	// Constructor
 	
-	public Usuario(String idusuario, String nombre_usuario, String email, String contrasena, String rol) {
+	public Usuario(int idusuario, String nombre_usuario, String email, String contrasena, String rol) {
 		this.idusuario = idusuario;
 		this.nombre_usuario = nombre_usuario;
 		this.email = email;
@@ -33,12 +33,12 @@ public class Usuario {
 
 	// Getters y setters
 
-	public String getIdusuario() {
+	public int getIdusuario() {
 		return idusuario;
 	}
 
 
-	public void setIdusuario(String idusuario) {
+	public void setIdusuario(int idusuario) {
 		this.idusuario = idusuario;
 	}
 

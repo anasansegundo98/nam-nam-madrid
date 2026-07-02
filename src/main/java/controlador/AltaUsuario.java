@@ -44,7 +44,7 @@ public class AltaUsuario extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		doGet(request, response);
 	
-		  	String idusuario = request.getParameter("idusuario");
+	    	int idusuario = Integer.parseInt(request.getParameter("idusuario"));
 		    String nombre_usuario = request.getParameter("nombre_usuario");
 		    String email = request.getParameter("email");
 		    String contrasena = request.getParameter("contrasena");
@@ -69,7 +69,7 @@ public class AltaUsuario extends HttpServlet {
 		                out.println("Modificación realizada correctamente");
 		                break;
 		            case "eliminar":
-		                UsuarioDAO.getInstance().eliminar(idusuario);
+		            	UsuarioDAO.getInstance().eliminar(idusuario);
 		                out.println("Baja realizada correctamente");
 		                break;
 		            case "consultar":

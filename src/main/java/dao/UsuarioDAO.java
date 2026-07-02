@@ -55,7 +55,7 @@ public class UsuarioDAO {
 	
 		PreparedStatement ps = conexion.prepareStatement(insertar);
 		
-		ps.setString(1, u.getIdusuario());	
+		ps.setInt(1, u.getIdusuario());	
 		ps.setString(2, u.getNombre_usuario());
 		ps.setString(3, u.getEmail());
 		ps.setString(4, u.getContrasena());
@@ -72,13 +72,13 @@ public class UsuarioDAO {
 	 * @param idusuario
 	 * @throws SQLException
 	 */
-	public void eliminar(String idusuario) throws SQLException {
+	public void eliminar(int idusuario) throws SQLException {
 		
 		String eliminar = "DELETE FROM usuario WHERE idusuario = ?";
 		
 		PreparedStatement ps = conexion.prepareStatement(eliminar);
 
-		ps.setString(1, idusuario);
+		ps.setInt(1, idusuario);
 		
 		ps.executeUpdate();
 		
@@ -98,29 +98,30 @@ public class UsuarioDAO {
 		
 		PreparedStatement ps = conexion.prepareStatement(modificar);
 
-		ps.setString(1, u.getIdusuario());	
-		ps.setString(2, u.getNombre_usuario());
-		ps.setString(3, u.getEmail());
-		ps.setString(4, u.getContrasena());
-			
+		ps.setString(1, u.getNombre_usuario());
+		ps.setString(2, u.getEmail());
+		ps.setString(3, u.getContrasena());
+		ps.setString(4, u.getRol());
+		ps.setInt(5, u.getIdusuario());	
+
 		
 		ps.executeUpdate();
 		ps.close();
 		
 	}
 	
-	public Usuario consultar(String idusuario) throws SQLException {
+	public Usuario consultar(int idusuario) throws SQLException {
 		String consultar = "SELECT * FROM usuario WHERE idusuario = ?";
 
 		PreparedStatement ps = conexion.prepareStatement(consultar);
-		ps.setString(1, idusuario);
+		ps.setInt(1, idusuario);
 		
 		ResultSet rs = ps.executeQuery();
 	    Usuario u = null; 
 	    
 	    if (rs.next()) { // Extraer datos del ResultSet y asignarlos al objeto
 			u = new Usuario();
-		    u.setIdusuario(rs.getString("idusuario"));
+	        u.setIdusuario(rs.getInt("idusuario"));
 		    u.setNombre_usuario("idusuario");
 		    u.setEmail(rs.getString("email"));
 		    u.setContrasena(rs.getString("contrasena"));
