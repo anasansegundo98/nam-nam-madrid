@@ -32,7 +32,7 @@ public class FotosComidaDAO {
 	
 	public void insertar(FotosComida f) throws SQLException {
 		
-		String insertar = "INSERT INTO fotosComida (idfotos_comida, restaurante_id, usuario_id, url_imagen, descripcion) VALUES(?, ?, ?, ?, ?)";
+		String insertar = "INSERT INTO fotos_comida (idfotos_comida, restaurante_id, usuario_id, url_imagen, descripcion) VALUES(?, ?, ?, ?, ?)";
 	
 		PreparedStatement ps = conexion.prepareStatement(insertar);
 		
@@ -67,7 +67,7 @@ public class FotosComidaDAO {
 	
 	public void modificar(FotosComida f) throws SQLException {
 		
-		String modificar = "UPDATE fotoscomida SET restaurante_id=?, usuario_id=?, url_imagen=?, descripcion=? WHERE idfotos_comida=?";
+		String modificar = "UPDATE fotos_comida SET restaurante_id=?, usuario_id=?, url_imagen=?, descripcion=? WHERE idfotos_comida=?";
 		
 		PreparedStatement ps = conexion.prepareStatement(modificar);
 

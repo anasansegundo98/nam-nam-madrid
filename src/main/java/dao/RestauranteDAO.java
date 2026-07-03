@@ -51,7 +51,7 @@ public class RestauranteDAO {
 	 */
 	public void insertar(Restaurante r) throws SQLException {
 			
-			String insertar = "INSERT INTO restaurante (idrestaurante, nombre, zona_id, direccion, categoría_id, precio_medio, url_google_maps, descripcion, destacado, creado_por) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String insertar = "INSERT INTO restaurantes (idrestaurante, nombre, zona_id, direccion, categoría_id, precio_medio, url_google_maps, descripcion, destacado, creado_por) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 			PreparedStatement ps = conexion.prepareStatement(insertar);
 			
@@ -73,12 +73,12 @@ public class RestauranteDAO {
 	
 	/**
 	 * 
-	 * @param idusuario
+	 * @param 
 	 * @throws SQLException
 	 */
 	public void eliminar(int idrestaurante) throws SQLException {
 		
-		String eliminar = "DELETE FROM usuario WHERE idrestaurante = ?";
+		String eliminar = "DELETE FROM restaurantes WHERE idrestaurante = ?";
 		
 		PreparedStatement ps = conexion.prepareStatement(eliminar);
 
@@ -126,7 +126,7 @@ public class RestauranteDAO {
 	 */
 	public Restaurante consultar(int idrestaurante) throws SQLException {
 		
-		String consultar = "SELECT * FROM usuario WHERE idrestaurante = ?";
+		String consultar = "SELECT * FROM restaurantes WHERE idrestaurante = ?";
 
 		PreparedStatement ps = conexion.prepareStatement(consultar);
 		ps.setInt(1, idrestaurante);
