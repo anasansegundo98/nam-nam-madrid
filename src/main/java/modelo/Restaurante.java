@@ -8,7 +8,7 @@ public class Restaurante {
 	private String nombre;
 	private int zona_id;
 	private String direccion;
-	private String categoría_id;
+	private int categoría_id;
 	private int precio_medio;
 	private String url_google_maps;
 	private String descripcion;
@@ -81,12 +81,12 @@ public class Restaurante {
 		this.direccion = direccion;
 	}
 
-	public String getCategoría_id() {
+	public int getCategoria_id() {
 		return categoría_id;
 	}
 
-	public void setCategoría_id(String categoría_id) {
-		this.categoría_id = categoría_id;
+	public void setCategoria_id(int categoria_id) {
+		this.categoría_id = categoria_id;
 	}
 
 	public int getPrecio_medio() {

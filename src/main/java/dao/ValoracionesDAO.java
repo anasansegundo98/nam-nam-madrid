@@ -53,8 +53,7 @@ public class ValoracionesDAO {
 	 */
 	public void insertar(Valoraciones v) throws SQLException {
 			
-			String insertar = "INSERT INTO valoraciones (idvaloraciones, restaurante_id, usuario_id, rating, visitado, fecha_visita, notas_privadas) VALUES(?, ?, ?, ?, ?, ?, ?)";
-		
+		String insertar = "INSERT INTO valoraciones (restaurante_id, usuario_id, rating, visitado, fecha_visita, notas_privadas) VALUES (?, ?, ?, ?, ?, ?)";		
 			PreparedStatement ps = conexion.prepareStatement(insertar);
 			
 			ps.setInt(1, v.getRestaurante_id());
@@ -63,6 +62,7 @@ public class ValoracionesDAO {
 			ps.setInt(4, v.getVisitado());
 			ps.setDate(5, java.sql.Date.valueOf(v.getFecha_visita()));
 			ps.setString(6, v.getNotas_privadas());
+
 			
 			ps.executeUpdate();
 			ps.close();
@@ -95,8 +95,8 @@ public class ValoracionesDAO {
 	 */
 	public void modificar(Valoraciones v) throws SQLException {
 		
-		String modificar = "UPDATE valoraciones SET nombre=?, zona_id=?, direccion=?, categoria_id=?, precio_medio=?, url_google_maps=?, descripcion=?, destacado=?, creado_por=? WHERE idvaloraciones=?";
-
+		String modificar =
+				"UPDATE valoraciones SET restaurante_id=?, usuario_id=?, rating=?, visitado=?, fecha_visita=?, notas_privadas=? WHERE idvaloraciones=?";
 		PreparedStatement ps = conexion.prepareStatement(modificar);
 
 		ps.setInt(1, v.getRestaurante_id());
@@ -105,6 +105,7 @@ public class ValoracionesDAO {
 		ps.setInt(4, v.getVisitado());
 		ps.setDate(5, java.sql.Date.valueOf(v.getFecha_visita()));
 		ps.setString(6, v.getNotas_privadas());
+		ps.setInt(7, v.getIdvaloraciones()); 
 		
 		ps.executeUpdate();
 		ps.close();
@@ -130,7 +131,7 @@ public class ValoracionesDAO {
 	    if (rs.next()) {
 	    	v = new Valoraciones();
 	    	
-	    	v.setIdvaloraciones(rs.getInt("idvaloraciones"));
+	        v.setIdvaloraciones(rs.getInt("idvaloraciones"));
 	    	v.setRestaurante_id(rs.getInt("restaurante_id"));
 	    	v.setUsuario_id(rs.getInt("usuario_id"));
 	    	v.setRating(rs.getDouble("rating"));

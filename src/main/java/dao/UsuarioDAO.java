@@ -119,15 +119,17 @@ public class UsuarioDAO {
 		ResultSet rs = ps.executeQuery();
 	    Usuario u = null; 
 	    
-	    if (rs.next()) { // Extraer datos del ResultSet y asignarlos al objeto
-			u = new Usuario();
+	    if (rs.next()) {
+
+	        u = new Usuario();
+
 	        u.setIdusuario(rs.getInt("idusuario"));
-		    u.setNombre_usuario("idusuario");
-		    u.setEmail(rs.getString("email"));
-		    u.setContrasena(rs.getString("contrasena"));
-		    u.setRol(rs.getString("rol"));
-		
-		}
+	        u.setNombre_usuario(rs.getString("nombre_usuario"));
+	        u.setEmail(rs.getString("email"));
+	        u.setContrasena(rs.getString("contrasena"));
+	        u.setRol(rs.getString("rol"));
+
+	    }
 		
 		ps.close();
 		

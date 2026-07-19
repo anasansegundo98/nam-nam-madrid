@@ -95,8 +95,8 @@ public class CategoriasCocinaDAO {
 		
 		PreparedStatement ps = conexion.prepareStatement(modificar);
 
-		ps.setInt(1, c.getIdcategorias_cocina());
-		ps.setString(2, c.getNombre());
+		ps.setString(1, c.getNombre());
+		ps.setInt(2, c.getIdcategorias_cocina());
 		
 					
 		

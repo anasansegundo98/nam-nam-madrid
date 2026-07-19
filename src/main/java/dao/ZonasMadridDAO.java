@@ -92,8 +92,9 @@ public class ZonasMadridDAO {
 
 		PreparedStatement ps = conexion.prepareStatement(modificar);
 
-		ps.setInt(1, z.getIdzonas_madrid());
-		ps.setString(2, z.getNombre());
+		ps.setString(1, z.getNombre());
+
+		ps.setInt(2, z.getIdzonas_madrid());
 
 		ps.executeUpdate();
 		ps.close();
@@ -121,7 +122,7 @@ public class ZonasMadridDAO {
 			z.setIdzonas_madrid(rs.getInt("idzonas_madrid"));
 			z.setNombre(rs.getString("nombre"));
 		}
-		
+
 		ps.close();
 		return z;
 

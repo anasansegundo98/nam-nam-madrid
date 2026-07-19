@@ -51,7 +51,7 @@ public class RestauranteDAO {
 	 */
 	public void insertar(Restaurante r) throws SQLException {
 			
-			String insertar = "INSERT INTO restaurantes (idrestaurante, nombre, zona_id, direccion, categoría_id, precio_medio, url_google_maps, descripcion, destacado, creado_por) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String insertar = "INSERT INTO restaurantes (idrestaurante, nombre, zona_id, direccion, categoria_id, precio_medio, url_google_maps, descripcion, destacado, creado_por) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 			PreparedStatement ps = conexion.prepareStatement(insertar);
 			
@@ -59,7 +59,7 @@ public class RestauranteDAO {
 			ps.setString(2, r.getNombre());
 			ps.setInt(3, r.getZona_id());
 			ps.setString(4, r.getDireccion());
-			ps.setString(5, r.getCategoría_id());
+			ps.setInt(5, r.getCategoria_id());
 			ps.setInt(6, r.getPrecio_medio());	
 			ps.setString(7, r.getUrl_google_maps());
 			ps.setString(8, r.getDescripcion());
@@ -97,7 +97,7 @@ public class RestauranteDAO {
 	 */
 	public void modificar(Restaurante r) throws SQLException {
 		
-		String modificar = "UPDATE restaurantes SET nombre=?, zona_id=?, direccion=?, categoria_id=?, precio_medio=?, url_google_maps=?, descripcion=?, destacado=?, creado_por=? WHERE id=?";
+		String modificar = "UPDATE restaurantes SET nombre=?, zona_id=?, direccion=?, categoria_id=?, precio_medio=?, url_google_maps=?, descripcion=?, destacado=?, creado_por=? WHERE idrestaurante=?";
 
 		
 		PreparedStatement ps = conexion.prepareStatement(modificar);
@@ -105,13 +105,13 @@ public class RestauranteDAO {
 		ps.setString(1, r.getNombre());
 		ps.setInt(2, r.getZona_id());
 		ps.setString(3, r.getDireccion());
-		ps.setString(4, r.getCategoría_id());
+		ps.setInt(4, r.getCategoria_id());
 		ps.setInt(5, r.getPrecio_medio());
 		ps.setString(6, r.getUrl_google_maps());
 		ps.setString(7, r.getDescripcion());
 		ps.setInt(8, r.getDestacado());
 		ps.setInt(9, r.getCreado_por());
-					
+		ps.setInt(10, r.getIdrestaurante());
 		
 		ps.executeUpdate();
 		ps.close();
@@ -141,7 +141,7 @@ public class RestauranteDAO {
 			r.setNombre(rs.getString("nombre"));
 			r.setZona_id(rs.getInt("zona_id"));
 			r.setDireccion(rs.getString("direccion"));
-			r.setCategoría_id(rs.getString("categoria_id"));
+			r.setCategoria_id(rs.getInt("categoria_id"));
 			r.setPrecio_medio(rs.getInt("precio_medio"));
 			r.setUrl_google_maps(rs.getString("url_google_maps"));
 			r.setDescripcion(rs.getString("descripcion"));
