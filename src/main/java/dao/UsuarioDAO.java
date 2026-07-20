@@ -51,11 +51,10 @@ public class UsuarioDAO {
 	 */
 	public void insertar(Usuario u) throws SQLException {
 		
-		String insertar = "INSERT INTO usuario (idusuario, nombre_usuario, email, contrasena, rol) VALUES(?, ?, ?, ?, ?)";
+		String insertar = "INSERT INTO usuario (idusuario, nombre_usuario, email, contrasena, rol) VALUES(?, ?, ?, ?)";
 	
 		PreparedStatement ps = conexion.prepareStatement(insertar);
 		
-		ps.setInt(1, u.getIdusuario());	
 		ps.setString(2, u.getNombre_usuario());
 		ps.setString(3, u.getEmail());
 		ps.setString(4, u.getContrasena());

@@ -51,11 +51,10 @@ public class FavoritosDAO {
 	 */
 	public void insertar(Favoritos f) throws SQLException {
 
-		String insertar = "INSERT INTO favoritos (idfavoritos, usuario_id, restaurante_id) VALUES(?, ?, ?)";
+		String insertar = "INSERT INTO favoritos (idfavoritos, usuario_id, restaurante_id) VALUES(?, ?)";
 
 		PreparedStatement ps = conexion.prepareStatement(insertar);
 
-		ps.setInt(1, f.getIdfavoritos());
 		ps.setInt(2, f.getUsuario_id());
 		ps.setInt(3, f.getRestaurante_id());
 
@@ -93,10 +92,10 @@ public class FavoritosDAO {
 		String modificar = "UPDATE favoritos SET usuario_id=?, restaurante_id=? WHERE idfavoritos=?";
 
 		PreparedStatement ps = conexion.prepareStatement(modificar);
-
-		ps.setInt(1, f.getIdfavoritos());
+		
 		ps.setInt(2, f.getUsuario_id());
 		ps.setInt(3, f.getRestaurante_id());
+		ps.setInt(1, f.getIdfavoritos());
 
 		ps.executeUpdate();
 		ps.close();

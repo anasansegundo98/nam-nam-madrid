@@ -52,11 +52,10 @@ public class CategoriasCocinaDAO {
 	 */
 	public void insertar(CategoriasCocina c) throws SQLException {
 			
-			String insertar = "INSERT INTO categorias_cocina (idcategorias_cocina, nombre) VALUES(?, ?)";
+			String insertar = "INSERT INTO categorias_cocina (idcategorias_cocina, nombre) VALUES(?)";
 		
 			PreparedStatement ps = conexion.prepareStatement(insertar);
 			
-			ps.setInt(1, c.getIdcategorias_cocina());	
 			ps.setString(2, c.getNombre());
 			
 			

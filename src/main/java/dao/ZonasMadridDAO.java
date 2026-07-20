@@ -50,11 +50,10 @@ public class ZonasMadridDAO {
 	 */
 	public void insertar(ZonasMadrid z) throws SQLException {
 
-		String insertar = "INSERT INTO zonas_madrid (idzonas_madrid, nombre) VALUES(?, ?)";
+		String insertar = "INSERT INTO zonas_madrid (idzonas_madrid, nombre) VALUES(?)";
 
 		PreparedStatement ps = conexion.prepareStatement(insertar);
 
-		ps.setInt(1, z.getIdzonas_madrid());
 		ps.setString(2, z.getNombre());
 
 		ps.executeUpdate();

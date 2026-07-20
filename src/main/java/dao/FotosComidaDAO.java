@@ -32,11 +32,10 @@ public class FotosComidaDAO {
 	
 	public void insertar(FotosComida f) throws SQLException {
 		
-		String insertar = "INSERT INTO fotos_comida (idfotos_comida, restaurante_id, usuario_id, url_imagen, descripcion) VALUES(?, ?, ?, ?, ?)";
+		String insertar = "INSERT INTO fotos_comida (idfotos_comida, restaurante_id, usuario_id, url_imagen, descripcion) VALUES(?, ?, ?, ?)";
 	
 		PreparedStatement ps = conexion.prepareStatement(insertar);
 		
-		ps.setInt(1, f.getIdfotos_comida());	
 		ps.setInt(2, f.getRestaurante_id());
 		ps.setInt(3, f.getUsuario_id());
 		ps.setString(4, f.getUrl_imagen());

@@ -51,11 +51,10 @@ public class RestauranteDAO {
 	 */
 	public void insertar(Restaurante r) throws SQLException {
 			
-			String insertar = "INSERT INTO restaurantes (idrestaurante, nombre, zona_id, direccion, categoria_id, precio_medio, url_google_maps, descripcion, destacado, creado_por) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String insertar = "INSERT INTO restaurantes (idrestaurante, nombre, zona_id, direccion, categoria_id, precio_medio, url_google_maps, descripcion, destacado, creado_por) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 			PreparedStatement ps = conexion.prepareStatement(insertar);
 			
-			ps.setInt(1, r.getIdrestaurante());	
 			ps.setString(2, r.getNombre());
 			ps.setInt(3, r.getZona_id());
 			ps.setString(4, r.getDireccion());
